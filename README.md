@@ -1,4 +1,4 @@
-# fakevid
+# rtc-canvas
 
 This is a small helper module that allows you to substitute a video
 element with a canvas element.  This can be useful when you want to 
@@ -24,20 +24,20 @@ media().render(fakevid(document.body));
 ```
 
 Normally, the `media().render` call will create a `<video>` element in
-the specified target container.  In this case, however, `fakevid` intercepts
-the request and creates it's own fake video element that is passed back
-to the render call.
+the specified target container.  In this case, however, `rtc-canvas`
+intercepts the request and creates it's own fake video element that is
+passed back to the render call.
 
 ## Using the Processing Pipeline
 
-As of `fakevid@0.3` a processing pipeline has been included to assist with
+A processing pipeline has been included to assist with
 manipulating the canvas on the fly. Adding a processor to the pipeline is
 simply a matter of adding a pipeline processor available on the returned
 fake video:
 
 ```js
 // add a processor
-vid.pipeline.add(function(imageData) {
+canvas.pipeline.add(function(imageData) {
   // examine the pixel data
 
   // if we've modified the pixel data and want to write that back
@@ -87,13 +87,13 @@ vid.pipeline.add(handleDraw);
 
 ## A Note with Regards to CPU Usage
 
-By default fakevid will draw at 25fps but this can be modified to capture
+By default rtc-canvas will draw at 25fps but this can be modified to capture
 at a lower frame rate for slower devices, or increased if you have a
 machine with plenty of grunt.
 
 ## Reference
 
-### fakevid(target, opts)
+### canvas(target, opts)
 
 Create a fake video element for the specified target element.
 
