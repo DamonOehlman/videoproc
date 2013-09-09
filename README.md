@@ -6,8 +6,9 @@ do pixel manipulation of the rendered images, or in situations when
 a video element does not behave as you expect.
 
 
-[![NPM](https://nodei.co/npm/fakevid.png)](https://nodei.co/npm/fakevid/)
+[![NPM](https://nodei.co/npm/rtc-canvas.png)](https://nodei.co/npm/rtc-canvas/)
 
+[![unstable](http://hughsk.github.io/stability-badges/dist/unstable.svg)](http://github.com/hughsk/stability-badges)
 
 ## Example Usage
 
@@ -17,7 +18,7 @@ example of how it works there:
 
 ```js
 var media = require('rtc-media');
-var fakevid = require('fakevid');
+var fakevid = require('rtc-canvas');
 
 media().render(fakevid(document.body));
 ```
@@ -49,7 +50,7 @@ A more complete example is shown below:
 
 ```js
 var media = require('rtc-media');
-var fakevideo = require('fakevid');
+var fakevideo = require('rtc-canvas');
 var vid;
 
 function handleDraw(imageData) {
@@ -102,7 +103,7 @@ Create a fake video element for the specified target element.
 
 ### MIT
 
-Copyright (c) 2013 Damon Oehlman <damon.oehlman@gmail.com>
+Copyright (c) 2013 National ICT Australia Limited (NICTA)
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
