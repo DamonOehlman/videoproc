@@ -1,6 +1,6 @@
 {
   "name": "rtc-canvas",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Draw video frames to a canvas and analyse / modify pixel data",
   "main": "index.js",
   "scripts": {
