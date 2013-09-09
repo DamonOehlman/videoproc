@@ -15,7 +15,7 @@
     "webrtc"
   ],
   "author": "Damon Oehlman <damon.oehlman@nicta.com.au>",
-  "license": "MIT",
+  "license": "Apache 2.0",
   "bugs": {
     "url": "https://github.com/rtc-io/rtc-canvas/issues"
   },
