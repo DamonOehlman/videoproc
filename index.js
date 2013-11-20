@@ -49,12 +49,6 @@ var raf = require('fdom/raf');
 
   <<< examples/grayscale-filter.js
 
-  ## A Note with Regards to CPU Usage
-
-  By default rtc-canvas will draw at 25fps but this can be modified to capture
-  at a lower frame rate for slower devices, or increased if you have a
-  machine with plenty of grunt.
-
   ## Listening for custom `frame` events
 
   In addition to providing the opportunity to analyse and modify pixel data
@@ -64,6 +58,12 @@ var raf = require('fdom/raf');
   A simple example can be found below:
 
   <<< examples/framelistener.js
+
+  ## A Note with Regards to CPU Usage
+
+  By default rtc-canvas will draw at 25fps but this can be modified to capture
+  at a lower frame rate for slower devices, or increased if you have a
+  machine with plenty of grunt.
 
   ## Reference
 
