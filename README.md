@@ -1,8 +1,8 @@
 # rtc-canvas
 
 This is a small helper module that allows you to substitute a video
-element with a canvas element.  This can be useful when you want to 
-do pixel manipulation of the rendered images, or in situations when 
+element with a canvas element.  This can be useful when you want to
+do pixel manipulation of the rendered images, or in situations when
 a video element does not behave as you expect.
 
 
@@ -66,7 +66,7 @@ function handleDraw(imageData) {
   }
 
   // iterate through the data
-  // NOTE: decrementing loops are fast but you need to know that you will 
+  // NOTE: decrementing loops are fast but you need to know that you will
   // hit 0 using this logic otherwise it will run forever (only 0 is falsy)
   for (ii = channels.length; ii -= 4; ) {
     // get the rgb tuple
@@ -97,6 +97,29 @@ vid.pipeline.add(handleDraw);
 By default rtc-canvas will draw at 25fps but this can be modified to capture
 at a lower frame rate for slower devices, or increased if you have a
 machine with plenty of grunt.
+
+## Listening for custom `frame` events
+
+In addition to providing the opportunity to analyse and modify pixel data
+the `rtc-canvas` module also provides the a custom `frame` event for
+detecting when a new frame has been drawn to the canvas.
+
+A simple example can be found below:
+
+```js
+var media = require('rtc-media');
+var fakevid = require('rtc-canvas');
+var canvas = fakevid(document.body);
+
+// capture the media and render to the fake canvas
+media().render(canvas);
+
+// listen from frames in the canvas
+canvas.addEventListener('frame', function(evt) {
+  console.log('captured frame at ' + evt.detail.tick);
+});
+
+```
 
 ## Reference
 

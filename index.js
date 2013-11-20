@@ -55,6 +55,16 @@ var raf = require('fdom/raf');
   at a lower frame rate for slower devices, or increased if you have a
   machine with plenty of grunt.
 
+  ## Listening for custom `frame` events
+
+  In addition to providing the opportunity to analyse and modify pixel data
+  the `rtc-canvas` module also provides the a custom `frame` event for
+  detecting when a new frame has been drawn to the canvas.
+
+  A simple example can be found below:
+
+  <<< examples/framelistener.js
+
   ## Reference
 
   ### canvas(target, opts)
@@ -125,26 +135,40 @@ function createFacade(canvas, vid, opts) {
   var processors = [];
   var pIdx;
   var pCount = 0;
+  var triggerFrameEvent = typeof CustomEvent != 'undefined';
 
   function addProcessor(processor) {
     pCount = processors.push(processor);
   }
 
-  function redraw() {
+  function redraw(tick) {
     var imageData;
     var tweaked;
+    var evt;
 
     if (! playing) {
       return;
     }
 
     // get the current tick
-    tick = Date.now();
+    tick = tick || Date.now();
 
     // only draw as often as specified in the fps
     if (tick - lastTick > drawDelay) {
       // draw the image
       context.drawImage(vid, drawX, drawY, drawWidth, drawHeight);
+
+      // create the frame event
+      evt = triggerFrameEvent && new CustomEvent('frame', {
+        detail: {
+          tick: tick
+        }
+      });
+
+      // if we have the frame event then dispatch
+      if (evt) {
+        canvas.dispatchEvent(evt);
+      }
 
       // if we have processors, get the image data and pass it through
       if (pCount) {
