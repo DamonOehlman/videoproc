@@ -20,7 +20,7 @@
     "url": "https://github.com/rtc-io/rtc-canvas/issues"
   },
   "dependencies": {
-    "cog": "~0.3.0"
+    "fdom": "~0.6.3"
   },
   "devDependencies": {
     "rtc-media": "*"

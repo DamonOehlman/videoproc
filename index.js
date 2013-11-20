@@ -4,7 +4,7 @@
 'use strict';
 
 var DEFAULT_FPS = 25;
-var raf = require('cog/raf');
+var raf = require('fdom/raf');
 
 /**
   # rtc-canvas
