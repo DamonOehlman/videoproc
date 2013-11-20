@@ -10,8 +10,8 @@ var raf = require('cog/raf');
   # rtc-canvas
 
   This is a small helper module that allows you to substitute a video
-  element with a canvas element.  This can be useful when you want to 
-  do pixel manipulation of the rendered images, or in situations when 
+  element with a canvas element.  This can be useful when you want to
+  do pixel manipulation of the rendered images, or in situations when
   a video element does not behave as you expect.
 
   ## Example Usage
@@ -62,7 +62,7 @@ var raf = require('cog/raf');
   Create a fake video element for the specified target element.
 
   - `fps` - the redraw rate of the fake video (default = 25)
-  
+
 **/
 module.exports = function(target, opts) {
   var canvas = (target instanceof HTMLCanvasElement) ?
@@ -177,7 +177,7 @@ function createFacade(canvas, vid, opts) {
     var scale;
     var scaleX;
     var scaleY;
-    
+
     // set the canvas the right size (if not already initialized)
     if (canvas.width === 0 || canvas.height === 0) {
       canvas.width = vid.videoWidth;
@@ -244,6 +244,6 @@ function createFacade(canvas, vid, opts) {
   };
 
   return {
-    add: addProcessor 
+    add: addProcessor
   };
 }

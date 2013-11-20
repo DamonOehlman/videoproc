@@ -15,7 +15,7 @@ function handleDraw(imageData) {
   }
 
   // iterate through the data
-  // NOTE: decrementing loops are fast but you need to know that you will 
+  // NOTE: decrementing loops are fast but you need to know that you will
   // hit 0 using this logic otherwise it will run forever (only 0 is falsy)
   for (ii = channels.length; ii -= 4; ) {
     // get the rgb tuple
