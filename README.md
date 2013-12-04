@@ -1,4 +1,4 @@
-# rtc-canvas
+# rtc-videoproc
 
 This is a small helper module that allows you to substitute a video
 element with a canvas element.  This can be useful when you want to
@@ -6,7 +6,7 @@ do pixel manipulation of the rendered images, or in situations when
 a video element does not behave as you expect.
 
 
-[![NPM](https://nodei.co/npm/rtc-canvas.png)](https://nodei.co/npm/rtc-canvas/)
+[![NPM](https://nodei.co/npm/rtc-videoproc.png)](https://nodei.co/npm/rtc-videoproc/)
 
 [![unstable](http://hughsk.github.io/stability-badges/dist/unstable.svg)](http://github.com/hughsk/stability-badges)
 
@@ -18,9 +18,9 @@ example of how it works there:
 
 ```js
 var media = require('rtc-media');
-var fakevid = require('rtc-canvas');
+var processor = require('rtc-videoproc');
 
-media().render(fakevid(document.body));
+media().render(processor(document.body));
 ```
 
 Normally, the `media().render` call will create a `<video>` element in
@@ -50,7 +50,7 @@ A more complete example is shown below:
 
 ```js
 var media = require('rtc-media');
-var fakevideo = require('rtc-canvas');
+var processor = require('rtc-videoproc');
 var vid;
 
 function handleDraw(imageData) {
@@ -86,7 +86,7 @@ function handleDraw(imageData) {
 }
 
 // capture media
-media().render(vid = fakevideo(document.body));
+media().render(vid = processor(document.body));
 
 // handle draw events on the fake video
 vid.pipeline.add(handleDraw);
@@ -102,8 +102,8 @@ A simple example can be found below:
 
 ```js
 var media = require('rtc-media');
-var fakevid = require('rtc-canvas');
-var canvas = fakevid(document.body);
+var processor = require('rtc-videoproc');
+var canvas = processor(document.body);
 
 // capture the media and render to the fake canvas
 media().render(canvas);

@@ -7,7 +7,7 @@ var DEFAULT_FPS = 25;
 var raf = require('fdom/raf');
 
 /**
-  # rtc-canvas
+  # rtc-videoproc
 
   This is a small helper module that allows you to substitute a video
   element with a canvas element.  This can be useful when you want to
