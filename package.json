@@ -1,5 +1,5 @@
 {
-  "name": "rtc-canvas",
+  "name": "rtc-videoproc",
   "version": "0.4.0",
   "description": "Draw video frames to a canvas and analyse / modify pixel data",
   "main": "index.js",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/rtc-io/rtc-canvas.git"
+    "url": "https://github.com/rtc-io/rtc-videoproc.git"
   },
   "keywords": [
     "webrtc"
@@ -17,7 +17,7 @@
   "author": "Damon Oehlman <damon.oehlman@nicta.com.au>",
   "license": "Apache 2.0",
   "bugs": {
-    "url": "https://github.com/rtc-io/rtc-canvas/issues"
+    "url": "https://github.com/rtc-io/rtc-videoproc/issues"
   },
   "dependencies": {
     "fdom": "~0.6.3"

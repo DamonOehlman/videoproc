@@ -1,5 +1,5 @@
 var media = require('rtc-media');
-var fakevideo = require('..');
+var processor = require('..');
 var vid;
 
 function handleDraw(imageData) {
@@ -35,7 +35,7 @@ function handleDraw(imageData) {
 }
 
 // capture media
-media().render(vid = fakevideo(document.body));
+media().render(vid = processor(document.body));
 
 // handle draw events on the fake video
 vid.pipeline.add(handleDraw);

@@ -1,4 +1,4 @@
 var media = require('rtc-media');
-var fakevid = require('..');
+var processor = require('..');
 
-media().render(fakevid(document.body));
+media().render(processor(document.body));
