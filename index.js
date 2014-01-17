@@ -47,6 +47,17 @@ var raf = require('fdom/raf');
 
   A more complete example is shown below:
 
+  <<< examples/grayscale-programmatic.js
+
+  ### Using the internal filters
+
+  From `rtc-videoproc@0.6` onwards, we have begun including some simple
+  filters as part of the library, which can be used by simply requiring
+  `rtc-videoproc/filters/%filtername%` and letting browserify do the rest.
+
+  An example of doing a grayscale transformation using the internal
+  filters is shown below:
+
   <<< examples/grayscale-filter.js
 
   ## Listening for custom `frame` events

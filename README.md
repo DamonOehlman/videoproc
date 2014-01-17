@@ -92,6 +92,27 @@ media().render(vid = processor(document.body));
 vid.pipeline.add(handleDraw);
 ```
 
+### Using the internal filters
+
+From `rtc-videoproc@0.6` onwards, we have begun including some simple
+filters as part of the library, which can be used by simply requiring
+`rtc-videoproc/filters/%filtername%` and letting browserify do the rest.
+
+An example of doing a grayscale transformation using the internal
+filters is shown below:
+
+```js
+var media = require('rtc-media');
+var processor = require('rtc-videoproc');
+var vid;
+
+// capture media
+media().render(vid = processor(document.body));
+
+// handle draw events on the fake video
+vid.pipeline.add(require('rtc-videoproc/filters/grayscale'));
+```
+
 ## Listening for custom `frame` events
 
 In addition to providing the opportunity to analyse and modify pixel data
@@ -133,7 +154,7 @@ Create a fake video element for the specified target element.
 
 ### Apache 2.0
 
-Copyright 2013 National ICT Australia Limited (NICTA)
+Copyright 2014 National ICT Australia Limited (NICTA)
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
