@@ -156,6 +156,7 @@ function createFacade(canvas, vid, opts) {
     var imageData;
     var tweaked;
     var evt;
+    var postProcessEvt;
 
     if (! playing) {
       return;
@@ -197,6 +198,12 @@ function createFacade(canvas, vid, opts) {
         if (tweaked) {
           // TODO: dirty area
           context.putImageData(imageData, 0, 0);
+
+          // trigger an event for getting the post processed data
+          postProcessEvt = triggerFrameEvent && new CustomEvent('postprocess');
+          if (postProcessEvt) {
+            canvas.dispatchEvent(postProcessEvt);
+          }
         }
       }
 
