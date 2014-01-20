@@ -135,6 +135,13 @@ function createFacade(canvas, vid, opts) {
   // initialise fps
   var fps = (opts || {}).fps || DEFAULT_FPS;
 
+  // init greedy capture settings
+  var greedy = (opts || {}).greedy;
+
+  // setTimeout should occur more frequently than the fps
+  // delay so we get close to the desired fps
+  var greedyDelay = (1000 / fps) >> 1;
+
   // calaculate the draw delay, clamp as int
   var drawDelay = (1000 / fps) | 0;
   var drawWidth;
@@ -212,7 +219,12 @@ function createFacade(canvas, vid, opts) {
     }
 
     // queue up another redraw
-    raf(redraw);
+    if (greedy) {
+      setTimeout(redraw, greedyDelay);
+    }
+    else {
+      raf(redraw);
+    }
   }
 
   function handlePlaying() {
