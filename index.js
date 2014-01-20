@@ -109,8 +109,9 @@ module.exports = function(target, opts) {
   canvas.width = (opts || {}).width || 0;
   canvas.height = (opts || {}).height || 0;
 
-  // hide the video element
+  // hide the video element and mute it
   vid.style.display = 'none';
+  vid.setAttribute('muted', '');
 
   // initialise the canvas pipeline
   canvas.pipeline = createFacade(canvas, vid, opts);
