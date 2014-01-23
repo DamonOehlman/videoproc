@@ -85,33 +85,14 @@ var raf = require('fdom/raf');
   - `fps` - the redraw rate of the fake video (default = 25)
 
 **/
-module.exports = function(target, opts) {
-  var canvas = (target instanceof HTMLCanvasElement) ?
-    target :
-    document.createElement('canvas');
+module.exports = function(opts) {
+  var canvas = opts.canvas || document.createElement('canvas');
 
-  var vid = (target instanceof HTMLVideoElement) ?
-    target :
-    document.createElement('video');
-
-  // if the target is a video
-  if (target === vid) {
-    // insert the canvas to the video parent element
-    vid.parentNode.insertBefore(canvas, vid);
-  }
-  // otherwise, if the target was not a canvas add the canvas to the target
-  else if (target !== canvas) {
-    // append the canvas to the target
-    target.appendChild(canvas);
-  }
+  var vid = opts.video || document.createElement('video');
 
   // initialise the canvas width and height
   canvas.width = (opts || {}).width || 0;
   canvas.height = (opts || {}).height || 0;
-
-  // hide the video element and mute it
-  vid.style.display = 'none';
-  vid.setAttribute('muted', '');
 
   // initialise the canvas pipeline
   canvas.pipeline = createFacade(canvas, vid, opts);
