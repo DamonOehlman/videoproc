@@ -116,7 +116,7 @@ vid.pipeline.add(require('rtc-videoproc/filters/grayscale'));
 ## Listening for custom `frame` events
 
 In addition to providing the opportunity to analyse and modify pixel data
-the `rtc-canvas` module also provides the a custom `frame` event for
+the `rtc-videoproc` module also provides the a custom `frame` event for
 detecting when a new frame has been drawn to the canvas.
 
 A simple example can be found below:
@@ -138,16 +138,23 @@ canvas.addEventListener('frame', function(evt) {
 
 ## A Note with Regards to CPU Usage
 
-By default rtc-canvas will draw at 25fps but this can be modified to capture
+By default rtc-videoproc will draw at 25fps but this can be modified to capture
 at a lower frame rate for slower devices, or increased if you have a
 machine with plenty of grunt.
 
 ## Reference
 
-### canvas(target, opts)
+### videoproc(opts?)
 
-Create a fake video element for the specified target element.
+Create (or patch) a `<canvas>` element that will receive the video images
+from a video element.  The following options are supported.
 
+- `canvas` - the canvas to draw video data to.  If not supplied a new 
+  canvas element will be created.
+
+- `video` - the video element that will be used as the source of the video.
+   If not supplied a new `<video>` element will be created.
+   
 - `fps` - the redraw rate of the fake video (default = 25)
 
 ## License(s)
