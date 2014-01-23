@@ -1,5 +1,5 @@
 {
-  "name": "rtc-videoproc-bal",
+  "name": "rtc-videoproc",
   "version": "0.8.2",
   "description": "Draw video frames to a canvas and analyse / modify pixel data",
   "main": "index.js",
