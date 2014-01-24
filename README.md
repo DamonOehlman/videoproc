@@ -12,97 +12,6 @@ a video element does not behave as you expect.
 
 ## Example Usage
 
-This was primarily written to work with the
-[rtc-media](https://github.com/rtc-io/rtc-media) library so here's an
-example of how it works there:
-
-```
-ERROR: could not find: 
-```
-
-Normally, the `media().render` call will create a `<video>` element in
-the specified target container.  In this case, however, `rtc-canvas`
-intercepts the request and creates it's own fake video element that is
-passed back to the render call.
-
-## Using the Processing Pipeline
-
-A processing pipeline has been included to assist with
-manipulating the canvas on the fly. Adding a processor to the pipeline is
-simply a matter of adding a pipeline processor available on the returned
-fake video:
-
-```js
-// add a processor
-canvas.pipeline.add(function(imageData) {
-  // examine the pixel data
-
-  // if we've modified the pixel data and want to write that back
-  // to the canvas then we must return a truthy value
-  return true;
-});
-```
-
-A more complete example is shown below:
-
-```js
-var crel = require('crel');
-var media = require('rtc-media');
-var videoproc = require('rtc-videoproc');
-var vid = crel('video');
-var canvas = crel('canvas');
-
-// create the processor
-var processor = videoproc(vid, canvas, {
-  filter: function(imageData) {
-    var channels = imageData.data;
-    var rgb = [];
-    var rgbAvg;
-    var alpha;
-    var ii;
-
-    // check that we have channels is divisible by four (just as a safety)
-    if (channels.length % 4 !== 0) {
-      return;
-    }
-
-    // iterate through the data
-    // NOTE: decrementing loops are fast but you need to know that you will
-    // hit 0 using this logic otherwise it will run forever (only 0 is falsy)
-    for (ii = channels.length; ii -= 4; ) {
-      // get the rgb tuple
-      rgb = [channels[ii], channels[ii + 1], channels[ii + 2]];
-
-      // get the alpha value
-      alpha = channels[ii + 3];
-
-      // calculate the rgb average
-      rgbAvg = (rgb[0] + rgb[1] + rgb[2] ) / 3;
-
-      // update the values to the rgb average
-      channels[ii] = channels[ii + 1] = channels[ii + 2] = rgbAvg;
-    }
-
-    return true;
-  }
-});
-
-// capture media and render
-media().render(vid);
-
-// add the canvas to the document
-document.body.appendChild(canvas);
-```
-
-### Using the internal filters
-
-From `rtc-videoproc@0.6` onwards, we have begun including some simple
-filters as part of the library, which can be used by simply requiring
-`rtc-videoproc/filters/%filtername%` and letting browserify do the rest.
-
-An example of doing a grayscale transformation using the internal
-filters is shown below:
-
 ```js
 var crel = require('crel');
 var media = require('rtc-media');
@@ -121,6 +30,47 @@ media().render(vid);
 // add the canvas to the document
 document.body.appendChild(canvas);
 ```
+
+## Using the Processing Pipeline
+
+A processing pipeline has been included to assist with
+manipulating the canvas on the fly. To specify the filters to be used
+in the processing pipeline, this is done in the options accepted by
+videoproc. Either specifying an array of filters with the `filters` option
+or a single filter function with the `filter` option is fine.  If you use
+both then the individual filter will be added filter list and used in
+series.
+
+```js
+videoproc(srcVideo, targetCanvas, {
+  filters: [
+    require('rtc-filter-grayscale'),
+    myCustomFilterFunction
+  ]
+});
+```
+
+## Writing a Filter Function
+
+Writing a filter function is very simple, and they use the following
+function signature:
+
+```js
+function filter(imageData, tick) {
+}
+```
+
+The `imageData` arg is an
+[ImageData](http://www.w3.org/TR/2dcontext/#imagedata), and the `tick`
+argument refers to the tick that has been captured as part of the capture
+loop (be aware that it could be a high resolution timer value if rAF is
+being used).
+
+If you are writing an analysis filter, then simply do what you need to do
+and exit the function.  If you have written a filter that modifies the pixel
+data and you want this drawn back to the canvas then your **filter must
+return `true`** to tell `rtc-videoproc` that it should draw the imageData
+back to the canvas.
 
 ## Listening for custom `frame` events
 
@@ -148,6 +98,9 @@ media().render(video);
 document.body.appendChild(video);
 ```
 
+NOTE: The `frame` event occurs after the filter pipeline has been run and
+and the imageData may have been modified from the original video frame.
+
 ## A Note with Regards to CPU Usage
 
 By default rtc-videoproc will draw at 25fps but this can be modified to capture
@@ -168,6 +121,12 @@ from a video element.  The following options are supported.
    If not supplied a new `<video>` element will be created.
 
 - `fps` - the redraw rate of the fake video (default = 25)
+
+- `greedy` - Specify `greedy: true` if you want the videoproc module to run
+  it's capture loop using setTimeout rather than `requestAnimationFrame`.
+  Doing this will mean you application will continue to capture and process
+  frames even when it's tab / window becomes inactive. This is usually the
+  desired behaviour with video conferencing applications.
 
 ## License(s)
 
