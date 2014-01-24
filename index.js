@@ -5,6 +5,7 @@
 
 var DEFAULT_FPS = 25;
 var raf = require('fdom/raf');
+var EventEmitter = require('events').EventEmitter;
 
 /**
   # rtc-videoproc
@@ -78,7 +79,7 @@ var raf = require('fdom/raf');
 
   ## Reference
 
-  ### videoproc(opts?)
+  ### videoproc(src, target, opts?)
 
   Create (or patch) a `<canvas>` element that will receive the video images
   from a video element.  The following options are supported.
@@ -88,74 +89,81 @@ var raf = require('fdom/raf');
 
   - `video` - the video element that will be used as the source of the video.
      If not supplied a new `<video>` element will be created.
-     
+
   - `fps` - the redraw rate of the fake video (default = 25)
 
 **/
-module.exports = function(opts) {
-  var canvas = opts.canvas || document.createElement('canvas');
-  var vid = opts.video || document.createElement('video');
+module.exports = function(src, target, opts) {
+  // check for a valid source
+  var validSource = typeof src != 'undefined'; // TODO: better check
+  var filters = [];
+  var resizeCanvas = false;
+  var fps;
+  var greedy;
+  var greedyDelay;
+  var drawDelay;
 
-  // initialise the canvas width and height
-  canvas.width = (opts || {}).width || 0;
-  canvas.height = (opts || {}).height || 0;
+  // create an event emitter for the processor object
+  var processor = new EventEmitter();
 
-  // initialise the canvas pipeline
-  canvas.pipeline = createFacade(canvas, vid, opts);
+  // check for no target but opts supplied
+  var shiftArgs = (! opts) && (! target) ||
+    (typeof target == 'object' && typeof target.getContext != 'function');
 
-  return canvas;
-};
-
-/*
-  ### createFacade(canvas, vid) ==> EventEmitter
-
-  Inject the required fake properties onto the canvas and return a
-  node-style EventEmitter that will provide updates on when the properties
-  change.
-
-*/
-function createFacade(canvas, vid, opts) {
-  var context = canvas.getContext('2d');
-  var playing = false;
-  var lastTick = 0;
-  var tick;
-
-  // initialise fps
-  var fps = (opts || {}).fps || DEFAULT_FPS;
-
-  // init greedy capture settings
-  var greedy = (opts || {}).greedy;
-
-  // setTimeout should occur more frequently than the fps
-  // delay so we get close to the desired fps
-  var greedyDelay = (1000 / fps) >> 1;
-
-  // calaculate the draw delay, clamp as int
-  var drawDelay = (1000 / fps) | 0;
+  // initialise the draw metadata
   var drawWidth;
   var drawHeight;
   var drawX = 0;
   var drawY = 0;
   var drawData;
+  var lastTick = 0;
 
-  var processors = [];
-  var pIdx;
-  var pCount = 0;
-  var triggerFrameEvent = typeof CustomEvent != 'undefined';
+  function syncCanvas() {
+    target.width = src.videoWidth;
+    target.height = src.videoHeight;
+    calculateDrawRegion();
+  }
 
-  function addProcessor(processor) {
-    pCount = processors.push(processor);
+  function calculateDrawRegion() {
+    var scale;
+    var scaleX;
+    var scaleY;
+
+    // if either width or height === 0 then bail
+    if (target.width === 0 || target.height === 0) {
+      return;
+    }
+
+    // calculate required scaling
+    scale = Math.min(
+      scaleX = (target.width / src.videoWidth),
+      scaleY = (target.height / src.videoHeight)
+    );
+
+    // calculate the scaled draw width and height
+    drawWidth = (src.videoWidth * scale) | 0;
+    drawHeight = (src.videoHeight * scale) | 0;
+
+    // calculate the offsetX and Y
+    drawX = (target.width - drawWidth) >> 1;
+    drawY = (target.height - drawHeight) >> 1;
+
+    // save the draw data
+    drawData = {
+      x: drawX,
+      y: drawY,
+      width: drawWidth,
+      height: drawHeight
+    };
   }
 
   function redraw(tick) {
+    var context = target.getContext('2d');
     var imageData;
     var tweaked;
     var evt;
     var postProcessEvt;
-
-    if (! playing) {
-      return;
-    }
+    var tweaked = false;
 
     // get the current tick
     tick = tick || Date.now();
@@ -163,44 +171,26 @@ function createFacade(canvas, vid, opts) {
     // only draw as often as specified in the fps
     if (tick - lastTick > drawDelay) {
       // draw the image
-      context.drawImage(vid, drawX, drawY, drawWidth, drawHeight);
-
-      // create the frame event
-      evt = triggerFrameEvent && new CustomEvent('frame', {
-        detail: {
-          tick: tick
-        }
-      });
-
-      // if we have the frame event then dispatch
-      if (evt) {
-        canvas.dispatchEvent(evt);
-      }
+      context.drawImage(src, drawX, drawY, drawWidth, drawHeight);
 
       // if we have processors, get the image data and pass it through
-      if (pCount) {
+      if (filters.length) {
         imageData = context.getImageData(0, 0, drawWidth, drawHeight);
         tweaked = false;
 
         // iterate through the processors
-        for (pIdx = 0; pIdx < pCount; pIdx++) {
-          // call the processor, and allow it to tell us if it has modified
-          // the pipeline
-          tweaked = processors[pIdx](imageData, context, canvas, drawData) ||
-            tweaked;
-        }
+        filters.forEach(function(filter) {
+          tweaked = filter(imageData, context, canvas, drawData) || tweaked;
+        });
 
         if (tweaked) {
           // TODO: dirty area
           context.putImageData(imageData, 0, 0);
-
-          // trigger an event for getting the post processed data
-          postProcessEvt = triggerFrameEvent && new CustomEvent('postprocess');
-          if (postProcessEvt) {
-            canvas.dispatchEvent(postProcessEvt);
-          }
         }
       }
+
+      // emit the processor frame event
+      processor.emit('frame', tick, imageData);
 
       // update the last tick
       lastTick = tick;
@@ -215,77 +205,45 @@ function createFacade(canvas, vid, opts) {
     }
   }
 
-  function handlePlaying() {
-    var scale;
-    var scaleX;
-    var scaleY;
-
-    // set the canvas the right size (if not already initialized)
-    if (canvas.width === 0 || canvas.height === 0) {
-      canvas.width = vid.videoWidth;
-      canvas.height = vid.videoHeight;
-    }
-
-    // if either width or height === 0 then bail
-    if (canvas.width === 0 || canvas.height === 0) {
-      return;
-    }
-
-    // calculate required scaling
-    scale = Math.min(
-      scaleX = (canvas.width / vid.videoWidth),
-      scaleY = (canvas.height / vid.videoHeight)
-    );
-
-    // calculate the scaled draw width and height
-    drawWidth = (vid.videoWidth * scale) | 0;
-    drawHeight = (vid.videoHeight * scale) | 0;
-
-    // calculate the offsetX and Y
-    drawX = (canvas.width - drawWidth) >> 1;
-    drawY = (canvas.height - drawHeight) >> 1;
-
-    // save the draw data
-    drawData = {
-      x: drawX,
-      y: drawY,
-      width: drawWidth,
-      height: drawHeight
-    };
-
-    // flag as playing
-    playing = true;
-
-    // start the animation loop
-    raf(redraw);
+  if (shiftArgs) {
+    opts = target;
+    target = document.createElement('canvas');
   }
 
-  vid.addEventListener('playing', handlePlaying);
+  // initialise the fps
+  fps = (opts || {}).fps || DEFAULT_FPS;
+  greedy = (opts || {}).greedy;
 
-  // inject the fake properties
-  ['mozSrcObject', 'src'].forEach(function(prop) {
-    if (typeof vid[prop] == 'undefined') {
-      return;
-    }
+  // setTimeout should occur more frequently than the fps
+  // delay so we get close to the desired fps
+  greedyDelay = (1000 / fps) >> 1;
 
-    Object.defineProperty(canvas, prop, {
-      get: function() {
-        return vid[prop];
-      },
+  // calaculate the draw delay, clamp as int
+  drawDelay = (1000 / fps) | 0;
 
-      set: function(value) {
-        vid[prop] = value;
-      }
-    });
-  });
+  // determine whether we should resize the canvas or not
+  resizeCanvas = target.width === 0 || target.height === 0;
 
-  // add a fake play function
-  canvas.play = function() {
-    // play the video
-    vid.play();
-  };
+  // if we've been provided a filters array in options initialise the filters
+  // with those functions
+  filters = filters.concat(((opts || {}).filters || []).map(function(filter) {
+    return typeof filter == 'function';
+  }));
 
-  return {
-    add: addProcessor
-  };
-}
+  // if a 'filter' option has been provided, then append to the filters array
+  if (opts && typeof opts.filter == 'function') {
+    filters.push(opts.filter);
+  }
+
+  // if we are resizing the canvas, then as the video metadata changes
+  // resync the canvas
+  src.addEventListener('loadedmetadata', syncCanvas);
+
+  // calculate the initial draw metadata (will be recalculated on video stream changes)
+  calculateDrawRegion();
+
+  // start the redraw
+  raf(redraw);
+
+  return processor;
+};
