@@ -21,6 +21,13 @@ test('create a video processor for the video', function(t) {
   t.ok(processor instanceof EventEmitter, 'created event emitter');
 });
 
+test('capture a frame of the video', function(t) {
+  t.plan(1);
+  processor.once('frame', function(tick, imageData) {
+    t.pass('got image data');
+  });
+});
+
 // test('play the video', function(t) {
 //   video.play();
 //   video.addEventListener('playing', function() {
