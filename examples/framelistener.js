@@ -1,11 +1,15 @@
 var media = require('rtc-media');
-var processor = require('..');
-var canvas = processor(document.body);
+var videoproc = require('..');
+var crel = require('crel');
+var video = crel('video');
 
-// capture the media and render to the fake canvas
-media().render(canvas);
-
-// listen from frames in the canvas
-canvas.addEventListener('frame', function(evt) {
-  console.log('captured frame at ' + evt.detail.tick);
+// set up the video processing pipeline
+videoproc(video).on('frame', function(imageData, tick) {
+  console.log('captured frame at: ' + tick);
 });
+
+// capture media and render to the video
+media().render(video);
+
+// add the canvas to the dom
+document.body.appendChild(video);

@@ -1,9 +1,16 @@
+var crel = require('crel');
 var media = require('rtc-media');
-var processor = require('..');
-var vid;
+var videoproc = require('..');
+var vid = crel('video');
+var canvas = crel('canvas');
 
-// capture media
-media().render(vid = processor(document.body));
+// create the processor
+var processor = videoproc(vid, canvas, {
+  filter: require('rtc-filter-grayscale')
+});
 
-// handle draw events on the fake video
-vid.pipeline.add(require('../filters/grayscale'));
+// capture media and render
+media().render(vid);
+
+// add the canvas to the document
+document.body.appendChild(canvas);
