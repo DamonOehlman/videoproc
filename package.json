@@ -23,6 +23,12 @@
     "fdom": "~0.6.3"
   },
   "devDependencies": {
-    "rtc-media": "*"
+    "rtc-media": "*",
+    "crel": "~1.1.1",
+    "tape": "~2.3.2",
+    "mocha": "~1.17.1",
+    "zuul": "~1.5.1",
+    "mime": "~1.2.11",
+    "rtc-filter-grayscale": "~0.1.0"
   }
 }
