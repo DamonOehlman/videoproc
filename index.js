@@ -169,7 +169,7 @@ module.exports = function(src, target, opts) {
     tick = tick || Date.now();
 
     // only draw as often as specified in the fps
-    if (tick - lastTick > drawDelay) {
+    if (drawWidth && drawHeight && tick - lastTick > drawDelay) {
       // draw the image
       context.drawImage(src, drawX, drawY, drawWidth, drawHeight);
 
@@ -180,7 +180,7 @@ module.exports = function(src, target, opts) {
 
         // iterate through the processors
         filters.forEach(function(filter) {
-          tweaked = filter(imageData, context, canvas, drawData) || tweaked;
+          tweaked = filter(imageData, tick, context, target, drawData) || tweaked;
         });
 
         if (tweaked) {
@@ -190,7 +190,7 @@ module.exports = function(src, target, opts) {
       }
 
       // emit the processor frame event
-      processor.emit('frame', tick, imageData);
+      processor.emit('frame', imageData, tick);
 
       // update the last tick
       lastTick = tick;
