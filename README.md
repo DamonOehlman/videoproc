@@ -16,11 +16,8 @@ This was primarily written to work with the
 [rtc-media](https://github.com/rtc-io/rtc-media) library so here's an
 example of how it works there:
 
-```js
-var media = require('rtc-media');
-var processor = require('rtc-videoproc');
-
-media().render(processor(document.body));
+```
+ERROR: could not find: 
 ```
 
 Normally, the `media().render` call will create a `<video>` element in
@@ -49,47 +46,52 @@ canvas.pipeline.add(function(imageData) {
 A more complete example is shown below:
 
 ```js
+var crel = require('crel');
 var media = require('rtc-media');
-var processor = require('rtc-videoproc');
-var vid;
+var videoproc = require('rtc-videoproc');
+var vid = crel('video');
+var canvas = crel('canvas');
 
-function handleDraw(imageData) {
-  var channels = imageData.data;
-  var rgb = [];
-  var rgbAvg;
-  var alpha;
-  var ii;
+// create the processor
+var processor = videoproc(vid, canvas, {
+  filter: function(imageData) {
+    var channels = imageData.data;
+    var rgb = [];
+    var rgbAvg;
+    var alpha;
+    var ii;
 
-  // check that we have channels is divisible by four (just as a safety)
-  if (channels.length % 4 !== 0) {
-    return;
+    // check that we have channels is divisible by four (just as a safety)
+    if (channels.length % 4 !== 0) {
+      return;
+    }
+
+    // iterate through the data
+    // NOTE: decrementing loops are fast but you need to know that you will
+    // hit 0 using this logic otherwise it will run forever (only 0 is falsy)
+    for (ii = channels.length; ii -= 4; ) {
+      // get the rgb tuple
+      rgb = [channels[ii], channels[ii + 1], channels[ii + 2]];
+
+      // get the alpha value
+      alpha = channels[ii + 3];
+
+      // calculate the rgb average
+      rgbAvg = (rgb[0] + rgb[1] + rgb[2] ) / 3;
+
+      // update the values to the rgb average
+      channels[ii] = channels[ii + 1] = channels[ii + 2] = rgbAvg;
+    }
+
+    return true;
   }
+});
 
-  // iterate through the data
-  // NOTE: decrementing loops are fast but you need to know that you will
-  // hit 0 using this logic otherwise it will run forever (only 0 is falsy)
-  for (ii = channels.length; ii -= 4; ) {
-    // get the rgb tuple
-    rgb = [channels[ii], channels[ii + 1], channels[ii + 2]];
+// capture media and render
+media().render(vid);
 
-    // get the alpha value
-    alpha = channels[ii + 3];
-
-    // calculate the rgb average
-    rgbAvg = (rgb[0] + rgb[1] + rgb[2] ) / 3;
-
-    // update the values to the rgb average
-    channels[ii] = channels[ii + 1] = channels[ii + 2] = rgbAvg;
-  }
-
-  return true;
-}
-
-// capture media
-media().render(vid = processor(document.body));
-
-// handle draw events on the fake video
-vid.pipeline.add(handleDraw);
+// add the canvas to the document
+document.body.appendChild(canvas);
 ```
 
 ### Using the internal filters
@@ -102,15 +104,22 @@ An example of doing a grayscale transformation using the internal
 filters is shown below:
 
 ```js
+var crel = require('crel');
 var media = require('rtc-media');
-var processor = require('rtc-videoproc');
-var vid;
+var videoproc = require('rtc-videoproc');
+var vid = crel('video');
+var canvas = crel('canvas');
 
-// capture media
-media().render(vid = processor(document.body));
+// create the processor
+var processor = videoproc(vid, canvas, {
+  filter: require('rtc-filter-grayscale')
+});
 
-// handle draw events on the fake video
-vid.pipeline.add(require('rtc-videoproc/filters/grayscale'));
+// capture media and render
+media().render(vid);
+
+// add the canvas to the document
+document.body.appendChild(canvas);
 ```
 
 ## Listening for custom `frame` events
@@ -123,17 +132,20 @@ A simple example can be found below:
 
 ```js
 var media = require('rtc-media');
-var processor = require('rtc-videoproc');
-var canvas = processor(document.body);
+var videoproc = require('rtc-videoproc');
+var crel = require('crel');
+var video = crel('video');
 
-// capture the media and render to the fake canvas
-media().render(canvas);
-
-// listen from frames in the canvas
-canvas.addEventListener('frame', function(evt) {
-  console.log('captured frame at ' + evt.detail.tick);
+// set up the video processing pipeline
+videoproc(video).on('frame', function(imageData, tick) {
+  console.log('captured frame at: ' + tick);
 });
 
+// capture media and render to the video
+media().render(video);
+
+// add the canvas to the dom
+document.body.appendChild(video);
 ```
 
 ## A Note with Regards to CPU Usage
@@ -144,7 +156,7 @@ machine with plenty of grunt.
 
 ## Reference
 
-### videoproc(opts?)
+### videoproc(src, target, opts?)
 
 Create (or patch) a `<canvas>` element that will receive the video images
 from a video element.  The following options are supported.
@@ -154,7 +166,7 @@ from a video element.  The following options are supported.
 
 - `video` - the video element that will be used as the source of the video.
    If not supplied a new `<video>` element will be created.
-   
+
 - `fps` - the redraw rate of the fake video (default = 25)
 
 ## License(s)
