@@ -125,6 +125,7 @@ module.exports = function(src, target, opts) {
   var drawY = 0;
   var drawData;
   var lastTick = 0;
+  var sourceMonitorTimer = 0;
 
   function syncCanvas() {
     target.width = src.videoWidth;
@@ -163,6 +164,16 @@ module.exports = function(src, target, opts) {
       width: drawWidth,
       height: drawHeight
     };
+  }
+
+  function monitorSource() {
+    clearInterval(sourceMonitorTimer);
+    sourceMonitorTimer = setInterval(function() {
+      if (src.videoWidth > 0 && src.videoHeight > 0) {
+        clearInterval(sourceMonitorTimer);
+        syncCanvas();
+      }
+    }, 100);
   }
 
   function redraw(tick) {
@@ -245,7 +256,8 @@ module.exports = function(src, target, opts) {
 
   // if we are resizing the canvas, then as the video metadata changes
   // resync the canvas
-  src.addEventListener('loadedmetadata', syncCanvas);
+  src.addEventListener('loadedmetadata', monitorSource);
+  src.addEventListener('canplay', monitorSource);
 
   // calculate the initial draw metadata (will be recalculated on video stream changes)
   calculateDrawRegion();
