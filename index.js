@@ -104,7 +104,6 @@ var EventEmitter = require('events').EventEmitter;
 module.exports = function(src, target, opts) {
   // check for a valid source
   var validSource = typeof src != 'undefined'; // TODO: better check
-  var filters = [];
   var resizeCanvas = false;
   var fps;
   var greedy;
@@ -193,12 +192,12 @@ module.exports = function(src, target, opts) {
       context.drawImage(src, drawX, drawY, drawWidth, drawHeight);
 
       // if we have processors, get the image data and pass it through
-      if (filters.length) {
+      if (processor.filters.length) {
         imageData = context.getImageData(0, 0, drawWidth, drawHeight);
         tweaked = false;
 
         // iterate through the processors
-        filters.forEach(function(filter) {
+        processor.filters.forEach(function(filter) {
           tweaked = filter(imageData, tick, context, target, drawData) || tweaked;
         });
 
@@ -245,13 +244,13 @@ module.exports = function(src, target, opts) {
 
   // if we've been provided a filters array in options initialise the filters
   // with those functions
-  filters = filters.concat(((opts || {}).filters || []).map(function(filter) {
+  processor.filters = ((opts || {}).filters || []).map(function(filter) {
     return typeof filter == 'function';
-  }));
+  });
 
   // if a 'filter' option has been provided, then append to the filters array
   if (opts && typeof opts.filter == 'function') {
-    filters.push(opts.filter);
+    processor.filters.push(opts.filter);
   }
 
   // if we are resizing the canvas, then as the video metadata changes
