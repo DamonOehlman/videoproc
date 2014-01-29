@@ -244,7 +244,7 @@ module.exports = function(src, target, opts) {
 
   // if we've been provided a filters array in options initialise the filters
   // with those functions
-  processor.filters = ((opts || {}).filters || []).map(function(filter) {
+  processor.filters = ((opts || {}).filters || []).filter(function(filter) {
     return typeof filter == 'function';
   });
 
