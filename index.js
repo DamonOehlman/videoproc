@@ -125,6 +125,7 @@ module.exports = function(src, target, opts) {
   var drawData;
   var lastTick = 0;
   var sourceMonitorTimer = 0;
+  var context;
 
   function syncCanvas() {
     target.width = src.videoWidth;
@@ -176,7 +177,6 @@ module.exports = function(src, target, opts) {
   }
 
   function redraw(tick) {
-    var context = target.getContext('2d');
     var imageData;
     var tweaked;
     var evt;
@@ -192,14 +192,10 @@ module.exports = function(src, target, opts) {
       // draw the image
       context.drawImage(src, drawX, drawY, drawWidth, drawHeight);
 
-      // capture the image data for the frame
-      if (frameListeners > 0 || processor.filters.length > 0) {
-        imageData = context.getImageData(0, 0, drawWidth, drawHeight);
-      }
-
       // if we have processors, get the image data and pass it through
       if (processor.filters.length) {
         tweaked = false;
+        imageData = context.getImageData(0, 0, drawWidth, drawHeight);
 
         // iterate through the processors
         processor.filters.forEach(function(filter) {
@@ -212,8 +208,11 @@ module.exports = function(src, target, opts) {
         }
       }
 
+      // update the processor imageData
+      processor.imageData = imageData;
+
       // emit the processor frame event
-      processor.emit('frame', imageData, tick);
+      processor.emit('frame', tick);
 
       // update the last tick
       lastTick = tick;
@@ -232,6 +231,10 @@ module.exports = function(src, target, opts) {
     opts = target;
     target = document.createElement('canvas');
   }
+
+  // save the target to the canvas property of the processor
+  processor.canvas = target;
+  context = processor.context = target.getContext('2d');
 
   // initialise the fps
   fps = (opts || {}).fps || DEFAULT_FPS;

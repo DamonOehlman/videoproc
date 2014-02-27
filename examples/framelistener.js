@@ -4,7 +4,7 @@ var crel = require('crel');
 var video = crel('video');
 
 // set up the video processing pipeline
-videoproc(video).on('frame', function(imageData, tick) {
+videoproc(video).on('frame', function(tick) {
   console.log('captured frame at: ' + tick);
 });
 

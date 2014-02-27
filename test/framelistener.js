@@ -23,8 +23,7 @@ test('create a video processor for the video', function(t) {
 
 test('capture a frame of the video', function(t) {
   t.plan(2);
-  processor.once('frame', function(imageData, tick) {
-    t.ok(imageData, 'got imagedata');
+  processor.once('frame', function(tick) {
     t.ok(tick, 'got tick');
   });
 });
