@@ -182,6 +182,7 @@ module.exports = function(src, target, opts) {
     var evt;
     var postProcessEvt;
     var tweaked = false;
+    var frameListeners = processor.listeners('frame').length;
 
     // get the current tick
     tick = tick || Date.now();
@@ -191,9 +192,13 @@ module.exports = function(src, target, opts) {
       // draw the image
       context.drawImage(src, drawX, drawY, drawWidth, drawHeight);
 
+      // capture the image data for the frame
+      if (frameListeners > 0 || processor.filters.length > 0) {
+        imageData = context.getImageData(0, 0, drawWidth, drawHeight);
+      }
+
       // if we have processors, get the image data and pass it through
       if (processor.filters.length) {
-        imageData = context.getImageData(0, 0, drawWidth, drawHeight);
         tweaked = false;
 
         // iterate through the processors
