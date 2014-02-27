@@ -22,9 +22,10 @@ test('create a video processor for the video', function(t) {
 });
 
 test('capture a frame of the video', function(t) {
-  t.plan(1);
+  t.plan(2);
   processor.once('frame', function(imageData, tick) {
-    t.pass('got image data');
+    t.ok(imageData, 'got imagedata');
+    t.ok(tick, 'got tick');
   });
 });
 
