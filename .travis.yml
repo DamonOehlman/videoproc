@@ -1,0 +1,11 @@
+language: node_js
+node_js:
+- 0.1
+notifications:
+  email:
+  - damon.oehlman@nicta.com.au
+  irc: irc.freenode.org#rtc.io
+env:
+  global:
+  - secure: JBZzLkhrG1X58xz54u3CHjz4duWQMMsQkdn3prB58Xrv3bS9JDdq5O57qEsy2OjTN49cRJWGYtJqCPlKZJ2+rixYjuy6oUMlVb24fCBo3uB5LUWt2my6M6pYm6oU0Gt431L1+b4fz12cb4oco17V+y78ZVL0vyWDyswpm3kFIFA=
+  - secure: E+sfJpIgMQz9AMj+Sdr+BZ8pMc1RGnh30x5+qxIRwYJO+UnYhKJSia20re2Xu+Rt1ID9E79aH3YalKYly+4aovFqI3KMEsfWu2D5Y+QbppM+aMqg+MDekYGgJS16kdj0BFvUwckRpFByEOzL8M9/jkzjtgG6YgZrzRQlWeeJ1DE=
