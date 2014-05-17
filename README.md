@@ -8,7 +8,7 @@ a video element does not behave as you expect.
 
 [![NPM](https://nodei.co/npm/rtc-videoproc.png)](https://nodei.co/npm/rtc-videoproc/)
 
-[![unstable](http://hughsk.github.io/stability-badges/dist/unstable.svg)](http://github.com/hughsk/stability-badges)
+[![Build Status](https://img.shields.io/travis/rtc-io/rtc-videoproc.svg?branch=master)](https://travis-ci.org/rtc-io/rtc-videoproc) [![unstable](https://img.shields.io/badge/stability-unstable-yellowgreen.svg)](https://github.com/badges/stability-badges) 
 
 ## Example Usage
 
@@ -87,7 +87,7 @@ var crel = require('crel');
 var video = crel('video');
 
 // set up the video processing pipeline
-videoproc(video).on('frame', function(imageData, tick) {
+videoproc(video).on('frame', function(tick) {
   console.log('captured frame at: ' + tick);
 });
 
