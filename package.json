@@ -20,7 +20,7 @@
     "url": "https://github.com/rtc-io/rtc-videoproc/issues"
   },
   "dependencies": {
-    "fdom": "~0.6.3"
+    "fdom": "~0.8"
   },
   "devDependencies": {
     "rtc-media": "^1",
