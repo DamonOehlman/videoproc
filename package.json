@@ -4,7 +4,7 @@
   "description": "Draw video frames to a canvas and analyse / modify pixel data",
   "main": "index.js",
   "scripts": {
-    "test": "zuul -- test/all.js",
+    "test": "testling -x ./.travis/start-$BROWSER.sh",
     "gendocs": "gendocs > README.md"
   },
   "repository": {
@@ -23,11 +23,11 @@
     "fdom": "~0.8"
   },
   "devDependencies": {
-    "rtc-media": "^1",
     "crel": "^1",
-    "tape": "^2",
-    "zuul": "^1",
     "mime": "^1",
-    "rtc-filter-grayscale": "~0.1"
+    "rtc-filter-grayscale": "~0.1",
+    "rtc-media": "^1",
+    "tape": "^2",
+    "testling": "^1.7.1"
   }
 }
