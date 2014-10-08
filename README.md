@@ -8,27 +8,21 @@ a video element does not behave as you expect.
 
 [![NPM](https://nodei.co/npm/rtc-videoproc.png)](https://nodei.co/npm/rtc-videoproc/)
 
-[![Build Status](https://img.shields.io/travis/rtc-io/rtc-videoproc.svg?branch=master)](https://travis-ci.org/rtc-io/rtc-videoproc) [![unstable](https://img.shields.io/badge/stability-unstable-yellowgreen.svg)](https://github.com/badges/stability-badges) 
+[![Build Status](https://img.shields.io/travis/rtc-io/rtc-videoproc.svg?branch=master)](https://travis-ci.org/rtc-io/rtc-videoproc) [![unstable](https://img.shields.io/badge/stability-unstable-yellowgreen.svg)](https://github.com/dominictarr/stability#unstable) 
 
 ## Example Usage
 
 ```js
 var crel = require('crel');
-var media = require('rtc-media');
 var videoproc = require('rtc-videoproc');
-var vid = crel('video');
+var video = crel('video', { src: '../test/assets/tennis.webm', autoplay: true });
 var canvas = crel('canvas');
-
-// create the processor
-var processor = videoproc(vid, canvas, {
+var processor = videoproc(video, canvas, {
   filter: require('rtc-filter-grayscale')
 });
 
-// capture media and render
-media().render(vid);
-
-// add the canvas to the document
 document.body.appendChild(canvas);
+
 ```
 
 ## Using the Processing Pipeline
@@ -81,21 +75,18 @@ detecting when a new frame has been drawn to the canvas.
 A simple example can be found below:
 
 ```js
-var media = require('rtc-media');
 var videoproc = require('rtc-videoproc');
 var crel = require('crel');
-var video = crel('video');
+var video = crel('video', { src: '../test/assets/tennis.webm', autoplay: true });
 
 // set up the video processing pipeline
 videoproc(video).on('frame', function(tick) {
   console.log('captured frame at: ' + tick);
 });
 
-// capture media and render to the video
-media().render(video);
-
 // add the canvas to the dom
 document.body.appendChild(video);
+
 ```
 
 NOTE: The `frame` event occurs after the filter pipeline has been run and
