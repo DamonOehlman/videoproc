@@ -20,6 +20,7 @@
     "url": "https://github.com/rtc-io/rtc-videoproc/issues"
   },
   "dependencies": {
+    "crel": "^2.1.5",
     "fdom": "~0.8"
   },
   "devDependencies": {
