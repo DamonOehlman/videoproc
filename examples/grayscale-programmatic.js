@@ -1,11 +1,9 @@
 var crel = require('crel');
 var media = require('rtc-media');
 var videoproc = require('..');
-var vid = crel('video');
+var video = crel('video', { src: '../test/assets/tennis.webm', autoplay: true });
 var canvas = crel('canvas');
-
-// create the processor
-var processor = videoproc(vid, canvas, {
+var processor = videoproc(video, canvas, {
   filter: function(imageData) {
     var channels = imageData.data;
     var rgb = [];
@@ -38,9 +36,6 @@ var processor = videoproc(vid, canvas, {
     return true;
   }
 });
-
-// capture media and render
-media().render(vid);
 
 // add the canvas to the document
 document.body.appendChild(canvas);
