@@ -1,9 +1,0 @@
-ui: tape
-browsers:
-  - name: chrome
-    version: 33..latest
-
-  - name: firefox
-    version: 27..latest
-
-server: ./test/server.js
