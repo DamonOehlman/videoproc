@@ -7,7 +7,6 @@ module.exports = function() {
   return http.createServer(function(req, res) {
     var src;
 
-    console.log(req.url);
     if (req.url === '/tennis.webm') {
       src = path.resolve(__dirname, 'assets', 'tennis.webm');
     }
