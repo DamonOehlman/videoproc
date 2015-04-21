@@ -1,5 +1,4 @@
 var crel = require('crel');
-var media = require('rtc-media');
 var videoproc = require('..');
 var video = crel('video', { src: '../test/assets/tennis.webm', autoplay: true });
 var canvas = crel('canvas');
