@@ -1,4 +1,4 @@
-# rtc-videoproc
+# videoproc
 
 This is a small helper module that allows you to substitute a video
 element with a canvas element.  This can be useful when you want to
@@ -6,15 +6,15 @@ do pixel manipulation of the rendered images, or in situations when
 a video element does not behave as you expect.
 
 
-[![NPM](https://nodei.co/npm/rtc-videoproc.png)](https://nodei.co/npm/rtc-videoproc/)
+[![NPM](https://nodei.co/npm/videoproc.png)](https://nodei.co/npm/videoproc/)
 
-[![Build Status](https://img.shields.io/travis/rtc-io/rtc-videoproc.svg?branch=master)](https://travis-ci.org/rtc-io/rtc-videoproc) [![unstable](https://img.shields.io/badge/stability-unstable-yellowgreen.svg)](https://github.com/dominictarr/stability#unstable) 
+[![Build Status](https://api.travis-ci.org/DamonOehlman/rtc-videoproc.svg?branch=master)](https://travis-ci.org/DamonOehlman/rtc-videoproc) [![bitHound Score](https://www.bithound.io/github/DamonOehlman/rtc-videoproc/badges/score.svg)](https://www.bithound.io/github/DamonOehlman/rtc-videoproc) 
 
 ## Example Usage
 
 ```js
 var crel = require('crel');
-var videoproc = require('rtc-videoproc');
+var videoproc = require('videoproc');
 var video = crel('video', { src: '../test/assets/tennis.webm', autoplay: true });
 var canvas = crel('canvas');
 var processor = videoproc(video, canvas, {
@@ -75,7 +75,7 @@ detecting when a new frame has been drawn to the canvas.
 A simple example can be found below:
 
 ```js
-var videoproc = require('rtc-videoproc');
+var videoproc = require('videoproc');
 var crel = require('crel');
 var video = crel('video', { src: '../test/assets/tennis.webm', autoplay: true });
 
@@ -105,7 +105,7 @@ machine with plenty of grunt.
 Create (or patch) a `<canvas>` element that will receive the video images
 from a video element.  The following options are supported.
 
-- `canvas` - the canvas to draw video data to.  If not supplied a new 
+- `canvas` - the canvas to draw video data to.  If not supplied a new
   canvas element will be created.
 
 - `video` - the video element that will be used as the source of the video.
@@ -121,18 +121,18 @@ from a video element.  The following options are supported.
 
 ## License(s)
 
-### Apache 2.0
+### ISC
 
-Copyright 2014 National ICT Australia Limited (NICTA)
+Copyright (c) 2015, Damon Oehlman <damon.oehlman@gmail.com>
 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
 
-     http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.

@@ -8,7 +8,7 @@ var raf = require('fdom/raf');
 var EventEmitter = require('events').EventEmitter;
 
 /**
-  # rtc-videoproc
+  # videoproc
 
   This is a small helper module that allows you to substitute a video
   element with a canvas element.  This can be useful when you want to
@@ -86,7 +86,7 @@ var EventEmitter = require('events').EventEmitter;
   Create (or patch) a `<canvas>` element that will receive the video images
   from a video element.  The following options are supported.
 
-  - `canvas` - the canvas to draw video data to.  If not supplied a new 
+  - `canvas` - the canvas to draw video data to.  If not supplied a new
     canvas element will be created.
 
   - `video` - the video element that will be used as the source of the video.
