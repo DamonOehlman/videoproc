@@ -8,7 +8,7 @@ a video element does not behave as you expect.
 
 [![NPM](https://nodei.co/npm/videoproc.png)](https://nodei.co/npm/videoproc/)
 
-[![Build Status](https://api.travis-ci.org/DamonOehlman/rtc-videoproc.svg?branch=master)](https://travis-ci.org/DamonOehlman/rtc-videoproc) [![bitHound Score](https://www.bithound.io/github/DamonOehlman/rtc-videoproc/badges/score.svg)](https://www.bithound.io/github/DamonOehlman/rtc-videoproc) 
+[![unstable](https://img.shields.io/badge/stability-unstable-yellowgreen.svg)](https://github.com/dominictarr/stability#unstable) [![Build Status](https://api.travis-ci.org/DamonOehlman/videoproc.svg?branch=master)](https://travis-ci.org/DamonOehlman/videoproc) [![bitHound Score](https://www.bithound.io/github/DamonOehlman/videoproc/badges/score.svg)](https://www.bithound.io/github/DamonOehlman/videoproc) 
 
 ## Example Usage
 
