@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "crel": "^2.1.5",
-    "fdom": "~0.8"
+    "fdom": "^1.2.0"
   },
   "devDependencies": {
     "broth": "^2.0.0",
