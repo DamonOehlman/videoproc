@@ -33,6 +33,7 @@
     "rtc-filter-grayscale": "~0.1",
     "rtc-media": "^1",
     "tape": "^3.0.0",
-    "testling": "^1.7.1"
+    "testling": "^1.7.1",
+    "travis-multirunner": "^2.1.0"
   }
 }
