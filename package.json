@@ -7,18 +7,11 @@
     "test": "browserify test/all.js | broth start-$BROWSER | tap-spec",
     "gendocs": "gendocs > README.md"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/DamonOehlman/rtc-videoproc.git"
-  },
   "keywords": [
     "webrtc"
   ],
   "author": "Damon Oehlman <damon.oehlman@gmail.com>",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/DamonOehlman/rtc-videoproc/issues"
-  },
   "dependencies": {
     "crel": "^2.1.5",
     "fdom": "^1.2.0"
@@ -30,5 +23,17 @@
     "tap-spec": "^3.0.0",
     "tape": "^3.0.0",
     "travis-multirunner": "^2.1.0"
-  }
+  },
+  "directories": {
+    "example": "examples",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DamonOehlman/videoproc.git"
+  },
+  "bugs": {
+    "url": "https://github.com/DamonOehlman/videoproc/issues"
+  },
+  "homepage": "https://github.com/DamonOehlman/videoproc"
 }
