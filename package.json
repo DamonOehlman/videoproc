@@ -4,7 +4,7 @@
   "description": "Draw video frames to a canvas and analyse / modify pixel data",
   "main": "index.js",
   "scripts": {
-    "test": "testling -x ./.travis/start-$BROWSER.sh",
+    "test": "browserify test/all.js | broth start-$BROWSER | tap-spec",
     "gendocs": "gendocs > README.md"
   },
   "repository": {
@@ -28,12 +28,14 @@
     "fdom": "~0.8"
   },
   "devDependencies": {
+    "broth": "^2.0.0",
+    "browserify": "^9.0.8",
     "crel": "^1",
     "mime": "^1",
     "rtc-filter-grayscale": "~0.1",
     "rtc-media": "^1",
+    "tap-spec": "^3.0.0",
     "tape": "^3.0.0",
-    "testling": "^1.7.1",
     "travis-multirunner": "^2.1.0"
   }
 }
