@@ -9,19 +9,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/rtc-io/rtc-videoproc.git"
+    "url": "https://github.com/DamonOehlman/rtc-videoproc.git"
   },
   "keywords": [
     "webrtc"
   ],
-  "author": "Damon Oehlman <damon.oehlman@nicta.com.au>",
-  "license": "Apache 2.0",
+  "author": "Damon Oehlman <damon.oehlman@gmail.com>",
+  "license": "ISC",
   "bugs": {
-    "url": "https://github.com/rtc-io/rtc-videoproc/issues"
-  },
-  "testling": {
-    "files": "test/all.js",
-    "server": "test/server.js"
+    "url": "https://github.com/DamonOehlman/rtc-videoproc/issues"
   },
   "dependencies": {
     "crel": "^2.1.5",
@@ -30,7 +26,6 @@
   "devDependencies": {
     "broth": "^2.0.0",
     "browserify": "^9.0.8",
-    "crel": "^1",
     "mime": "^1",
     "rtc-filter-grayscale": "~0.1",
     "rtc-media": "^1",
