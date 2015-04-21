@@ -8,7 +8,7 @@ var processor;
 test('create a video element and load the test file', function(t) {
   t.plan(1);
   video = crel('video');
-  video.src = 'tennis.webm';
+  video.src = '../tennis.webm';
 
   video.addEventListener('canplay', function() {
     t.pass('can play the video');
